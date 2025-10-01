@@ -1,0 +1,8 @@
+ # Entra no projeto
+ -- cd NomeDoProjero
+
+ # Executar
+ --dotnet run
+
+ # Instalar biblioteca do SqlServer
+-- dotnet add package Microsoft.Data.SqlServer
