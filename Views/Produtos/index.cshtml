@@ -1,3 +1,10 @@
+@* Páginas cshtml são chamados de Razor *@
+
+@* Está diretiva define o 'model' que a view irá receber do Controller *@
+@* Nesse caso, a view espera uma lista de objetos 'ProdutoModel' *@
+@* Isso permite que você acesse os dados do C# diretamente na View usando a variável 'Model' *@
+@model List<lojabanco.Models.ProdutoModel>
+
 <h1>Lista de Produtos</h1>
 
 <table class="table">
@@ -10,18 +17,20 @@
     </tr>
   </thead>
   <tbody>
+  @foreach(var produto in Model){
     <tr>
-      <th scope="row">1</th>
-      <td>Nome Produto 1</td>
-      <td>R$99,99</td>
+      <th scope="row">@produto.Id</th>
+      <td>@produto.Nome</td>
+      <td>@produto.Preco</td>
       <td>
-        <a href="" class="btn btn-primary btn-sm">Ver</a>
-        <a href="" class="btn btn-primary btn-sm">Editar</a>
+        <a href='@Url.Action("Detalhes", "Produtos", new {id = produto.Id})' class="btn btn-primary btn-sm">Ver</a>
+        <a href='@Url.Action("Editar", "Produtos", new {id = produto .Id})' class="btn btn-primary btn-sm">Editar</a>
         <form action="">
             <input type="text">
             <button class="btn btn-danger btn-sm">Deletar</button>
         </form>
       </td>
     </tr>
+  }
   </tbody>
 </table>

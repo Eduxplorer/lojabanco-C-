@@ -21,4 +21,4 @@ namespace lojabanco.Models
     }
 }
 
-// Para cada tabela do seu bacno crie um modelo.
+// Para cada tabela do seu banco crie um modelo.

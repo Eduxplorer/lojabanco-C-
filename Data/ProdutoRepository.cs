@@ -32,11 +32,11 @@ namespace lojabanco.Data {
 
         // Trusted_Connection=true: significa que será usada a autenticação do Windows
         // (ou seja, o login do usuário do Windows é usado para conectar).
-        
+
         // MultipleActiveResultSets=true: permite que várias consultas (SELECT, por exemplo)
         // sejam executadas ao mesmo tempo na mesma conexão.
 
-        private string connectionString = "Server=TIT0577564W11-1\\SQLEXPRESS;Database=LojaMvc;TrustServerCertificate=True;Trusted_Connection=true; MultipleActiveResuktSets=true;";
+        private string connectionString = "Server=TIT0577564W11-1\\SQLEXPRESS; Database=LojaMvc; TrustServerCertificate=true; Trusted_Connection=True; MultipleActiveResultSets=true;";
 
         public List<ProdutoModel> GetProdutos()
         {
@@ -73,6 +73,60 @@ namespace lojabanco.Data {
             }
 
             return produtos;
+        }
+        public ProdutoModel GetProduto(int id)
+        {
+            ProdutoModel produto = null;
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                var command = new SqlCommand("SELECT Id, Nome, Descricao, Preco FROM Produtos WHERE Id = @id", connection);
+
+                command.Parameters.AddWithValue("@id", id);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        produto = new ProdutoModel
+                        {
+                            Id = reader.GetInt32(0),
+                            Nome = reader.GetString(1),
+                            Descricao = reader.GetString(2),
+                            Preco = reader.GetDecimal(3)
+                        };
+                    }
+                }
+            }
+            return produto;
+        }
+
+        public bool UpdateProduto(ProdutoModel produto) {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Mudando nome da variável para demonstrar que o comportamento é o mesmo
+                    string sql = "UPDATE Produtos SET Nome = @Nome, Descricao = @Descricao, Preco = @Preco WHERE Id = @Id";
+
+                    var command = new SqlCommand(sql, connection);
+
+                    command.Parameters.AddWithValue("@Nome", produto.Nome);
+                    command.Parameters.AddWithValue("@Descricao", produto.Descricao);
+                    command.Parameters.AddWithValue("@Preco", produto.Preco);
+
+                    // ExecuteNonQuery é usado para comandos que não retorna dados (update, delete e insert)
+                    // Ele retorna o número de linha afetadas
+                    int linhaAfetadas = command.ExecuteNonQuery();
+                    return linhaAfetadas > 0;
+                } catch (Exception ex) {
+                    return false;
+                }
+            }
         }
     }
 }

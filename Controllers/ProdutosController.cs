@@ -12,7 +12,7 @@ using lojabanco.Models;
 
 namespace lojabanco.Controllers
 {
-    public class ProdutosController : Controller 
+    public class ProdutosController : Controller
     {
 
         // Declara uma instância do nosso repositório de produtos.
@@ -20,8 +20,58 @@ namespace lojabanco.Controllers
         private ProdutoRepository _repo = new ProdutoRepository();
         public IActionResult Index()
         {
-            var produtos = _repo.GetProdutos;
+            var produtos = _repo.GetProduto;
             return View(produtos);
+        }
+
+        public IActionResult Detalhes(int id)
+        {
+            var produto = _repo.GetProduto(id);
+
+
+            // É comum caso tenha um IF com apenas uma coisa dentro alguns programadores não colocarem chaves
+            if (produto == null)
+            {
+                return NotFound();
+            }
+
+            return View(produto);
+        }
+
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+            var produto = _repo.GetProduto(id);
+
+            if (produto == null)
+            {
+                return NotFound();
+            }
+
+            return View(produto);
+
+
+        }
+        [HttpPost]
+        public IActionResult Editar(ProdutoModel produto)
+        {
+            // 'ModelState.isValid' verifica se os dados enviados pelo ormulário correponde as regras de validação que definimos no ProdutoModel usando "Data Annotarions" (como [Required] e [range])
+            if (ModelState.IsValid)
+            {
+                // Se os dados for valido chama o mmétodo do repositorio para atualizar o produto no banco de dados
+                bool sucesso = _repo.UpdateProduto(produto);
+
+                if (sucesso)
+                {
+                    // Se a atualização for bem-sucedida, redireciona para a página de detalhes do produto
+                    // 'RedirectToAction' evita o problema de re-submit do formulário 
+                    return RedirectToAction("Detalhes", new { id = produto.Id });
+                }
+
+                // Se a atualização falhou (por exemplo, um erro de banco de dados), adiciona uma mensagem de erro ao 'ModelState' para que seja exibida na View
+                ModelState.AddModelError("", "Ocorreu um erro ao salvar as alterações");
+            }
+            return View(produto);
         }
     }
 }
