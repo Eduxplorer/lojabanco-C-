@@ -15,8 +15,18 @@ namespace lojabanco.Models
 
         // Para o dotnet string não pode ser vazio igual int então temos que dar um valor
         // O valor null! avisa ao compilador que a propriedade nunca será vazia
+
+        [Display(Name = "Nome")]
+        [Required(ErrorMessage ="O campo Nome é obrigatório.")]
         public string Nome { get; set; } = null!;
+
+        [Display(Name = "Descrição")]
+        [Required(ErrorMessage ="O campo Descrição é obrigatório.")]
         public string Descricao { get; set; } = null!;
+
+        [Display(Name = "Preço")]
+        [Required(ErrorMessage = "O campo preço é obrigatório")]
+        [Range(0.01, (double)decimal.MaxValue, ErrorMessage = "O preço deve ser maior que zero.")]
         public decimal Preco { get; set; }
     }
 }
