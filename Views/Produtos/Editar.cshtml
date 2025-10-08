@@ -1,7 +1,7 @@
 @model lojabanco.Models.ProdutoModel
 <h1>Editar Produto</h1>
 
-<form method="POST">
+<form method="POST" id="editarForm">
 <div class="mb-3">
 <input type="text" asp-for="Id">
   <label asp-for="Nome" class="form-label">Nome</label>
@@ -18,3 +18,45 @@
   <button asp-action="Index" class="btn btn-secondary">Cancelar</button>
 </div>
 </form>
+
+<div class="modal fade" id="confirmarEditarModal" tabindex="-1" aria-labelledby="confirmarEditarLabel">
+
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="confirmarEditarLabel">
+                  confirmar edição
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <p>Tem certeza que deseja editar o produto <span>@Model.Nome</span>?</p>        
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+              <button type="button" class="btn btn-primary" id="confirmarEditarBtn">Sim, editar</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+@section Scripts{
+
+
+  <script>
+  @* O evento 'DOMContentLoaded' garante que o código JavaScript só será executado após todo o HTML da página ter sido carregado e analisado. Isso evita erros como algum ID ser renderizado depois do javascript, o que  faria o elemento não ser encontrado e retornaria um erro. *@
+  document.addEventListener("DOMContentLoaded", function(){
+    const editarForm = document.getElementById('editarForm');
+    const confirmarEditarModal = new bootstrap.Modal(document.getElementById('confirmarEditarModal'));
+
+    const confirmarEditarBtn = document.getElementById('confirmarEditarBtn');
+
+
+    editarForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // Impede o envio padrão do formulário
+      confirmarEditarModal.show(); // exibir o modal de confirmação
+    })
+  })
+  </script>
+}

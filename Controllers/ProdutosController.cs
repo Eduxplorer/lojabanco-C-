@@ -16,11 +16,11 @@ namespace lojabanco.Controllers
     {
 
         // Declara uma instância do nosso repositório de produtos.
-        // O underscore ('_') no iinicio do nome é uma convenção para campos privados.
+        // O underscore ('_') no inicio do nome é uma convenção para campos privados.
         private ProdutoRepository _repo = new ProdutoRepository();
         public IActionResult Index()
         {
-            var produtos = _repo.GetProduto;
+            var produtos = _repo.GetProdutos();
             return View(produtos);
         }
 
