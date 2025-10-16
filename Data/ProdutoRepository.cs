@@ -103,7 +103,8 @@ namespace lojabanco.Data {
             return produto;
         }
 
-        public bool UpdateProduto(ProdutoModel produto) {
+        public bool UpdateProduto(ProdutoModel produto)
+        {
             using (var connection = new SqlConnection(connectionString))
             {
                 try
@@ -125,7 +126,62 @@ namespace lojabanco.Data {
                     // Ele retorna o número de linha afetadas
                     int linhaAfetadas = command.ExecuteNonQuery();
                     return linhaAfetadas > 0;
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool DeleteProduto(int id)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+
+                try
+                {
+                    connection.Open();
+                    string sql = "DELETE FROM Produtos WHERE Id = @Id";
+                    var command = new SqlCommand(sql, connection);
+
+                    command.Parameters.AddWithValue("@Id", id);
+
+                    int linhasAfetadas = command.ExecuteNonQuery();
+
+                    return linhasAfetadas < 0;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+
+
+
+
+        }
+
+        public bool CreateProduto(ProdutoModel produto)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string sql = "INSERT INTO Produtos (Nome, Preco, Descricao) Values(@Nome, @Preco, @Descricao)";
+                    var command = new SqlCommand(sql, connection);
+
+                    command.Parameters.AddWithValue("@Nome", produto.Nome);
+                    command.Parameters.AddWithValue("@Preco", produto.Preco);
+                    command.Parameters.AddWithValue("@Descricao", produto.Descricao);
+
+                    int linhasAfetadas = command.ExecuteNonQuery();
+
+                    return linhasAfetadas > 0;
+                }
+                catch (Exception ex)
+                {
                     return false;
                 }
             }

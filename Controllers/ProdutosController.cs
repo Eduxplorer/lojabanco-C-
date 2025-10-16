@@ -73,6 +73,45 @@ namespace lojabanco.Controllers
             }
             return View(produto);
         }
+
+        [HttpPost, ActionName("Deletar")]
+        [ValidateAntiForgeryToken] // Para prevenir ataques contra segurança
+
+        public IActionResult DeletarProduto(int id)
+        {
+            bool sucesso = _repo.DeleteProduto(id);
+
+            if (sucesso)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Index");
+
+        }
+
+
+        [HttpGet]
+        public IActionResult Criar()
+        {
+            return View();
+        }
+
+        [HttpPost]
+
+        public IActionResult Criar(ProdutoModel produto)
+        {
+            if (ModelState.IsValid)
+            {
+                bool sucesso = _repo.CreateProduto(produto);
+                if (sucesso)
+                {
+                    return RedirectToAction("Index");
+                }
+                ModelState.AddModelError("", "Ocorreu um erro ao salvar um novo produto.");
+            };
+            return View(produto);
+        }
     }
 }
 

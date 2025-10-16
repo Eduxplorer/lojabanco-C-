@@ -25,9 +25,9 @@
       <td>
         <a href='@Url.Action("Detalhes", "Produtos", new {id = produto.Id})' class="btn btn-primary btn-sm">Ver</a>
         <a href='@Url.Action("Editar", "Produtos", new {id = produto .Id})' class="btn btn-primary btn-sm">Editar</a>
-        <form action="">
-            <input type="text">
-            <button class="btn btn-danger btn-sm">Deletar</button>
+        <form asp-action="Deletar" asp-controller="Produtos" method="post" onsubmit="return confirm('Tem certeza que deseja  deletar o @produto.Nome?')">
+            <input type="text" value="@produto.Id" name="id">
+            <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
         </form>
       </td>
     </tr>
